@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -20,7 +22,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WhatsAppActivity extends AppCompatActivity {
+public class WhatsAppActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ListView listViewUser;
     private ArrayList<String> waUser;
@@ -36,6 +38,8 @@ public class WhatsAppActivity extends AppCompatActivity {
         waUser = new ArrayList<>();
         adapter = new ArrayAdapter(WhatsAppActivity.this, android.R.layout.simple_list_item_1, waUser);
         swipeRefreshLayout = findViewById(R.id.swipeContainer);
+
+        listViewUser.setOnItemClickListener(this);
 
         try {
             ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
@@ -122,5 +126,13 @@ public class WhatsAppActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(WhatsAppActivity.this, WhatsAppChatActivity.class);
+        intent.putExtra("selectedUser", waUser.get(position));
+        startActivity(intent);
+
     }
 }
